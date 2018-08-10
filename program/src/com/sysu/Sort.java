@@ -78,4 +78,26 @@ public class Sort {
         arr[i] = pivot;
         return i;
     }
+
+    /**
+     * 递增插入排序
+     * @描述 就是每次把第n个元素插入到前面的n-1个已经排好序的元素中
+     */
+    public void insertSort(int[] arr) {
+        if (arr.length < 2) return;
+        for (int i = 1; i < arr.length; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j > 0; j--) {
+                if (temp < arr[j-1]) {
+                    arr[j] = arr[j-1];
+                } else {
+                    break;
+                }
+            }
+            arr[j] = temp;
+        }
+    }
+
+
 }

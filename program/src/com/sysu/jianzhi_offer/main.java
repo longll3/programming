@@ -3,9 +3,8 @@ package com.sysu.jianzhi_offer;
 import com.sysu.sam_DailyQuestion.List;
 import com.sysu.jianzhi_offer.UglyNumber;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class main {
     public static void main(String[] args) {
@@ -67,4 +66,57 @@ public class main {
 
      	return (exponent > 1) ? res : (1/res);
   	}
+
+	/**
+	 * 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，
+	 * 使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
+	 * @param array
+	 */
+	public void reOrderArray(int [] array) {
+		// Queue<Integer> odd = new LinkedList<>();
+		// Queue<Integer> even = new LinkedList<>();
+		// for (int i = 0; i<array.length; i++) {
+		// 	if (array[i] % 2 == 0) {
+		// 		even.offer(array[i]);
+		// 	} else {
+		// 		odd.offer(array[i]);
+		// 	}
+		// }
+
+		// int i = 0;
+		// while (!odd.isEmpty()) {
+		// 	array[i] = odd.poll();
+		// 	i++;
+		// }
+		// while (!even.isEmpty()) {
+		// 	array[i] = even.poll();
+		// 	i++;
+		// }
+
+		// //使用插入排序实现
+		// for (int j = 0 ; j < array.length; j++) {
+		// 	if (array[j] %2 == 1) {
+
+		// 	}
+		// }
+        //
+        // 使用插入排序
+        for (int i = 1; i < array.length; i++) {
+            if (array[i]%2 == 1) {
+                int temp = array[i];
+                int j;
+                for (j = i; j > 0; j--) {
+                    if (array[j-1] % 2 == 0) {
+                        array[j] = array[j-1];
+                    } else {
+                        break;
+                    }
+                }
+                array[j] = temp;
+            }
+            
+        } 
+        
+	}
+
 }
