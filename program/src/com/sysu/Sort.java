@@ -99,5 +99,22 @@ public class Sort {
         }
     }
 
+    /**
+     *冒泡排序
+     * @描述 从头开始比较，把最大的冒到最后去。
+     */
+
+    public void bubbleSort(int[] arr) {
+        if (arr.length < 2) return;
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j+1]) {
+                   int temp = arr[j];
+                   arr[j] = arr[j+1];
+                   arr[j+1] = temp;
+                }
+            }
+        }
+    }
 
 }

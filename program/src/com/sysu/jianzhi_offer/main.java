@@ -1,20 +1,18 @@
 package com.sysu.jianzhi_offer;
 
-import com.sysu.sam_DailyQuestion.List;
-import com.sysu.jianzhi_offer.UglyNumber;
-
-import java.util.Queue;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
+import java.util.HashSet;
 
 public class main {
     public static void main(String[] args) {
 
 
-        UglyNumber uglyNum = new UglyNumber();
-        int ugly = uglyNum.GetUglyNumber_Solution(3);
+		char[] matrix = {'a', 'b', 'c', 'e', 's', 'f', 'c', 's', 'a', 'd', 'e', 'e'};
+		char[] str = {'b','c','c','e','d'};
+		System.out.println(hasPath(matrix, 3, 4, str));
 
-
-        System.out.println(ugly);
 
     }
 
@@ -73,33 +71,6 @@ public class main {
 	 * @param array
 	 */
 	public void reOrderArray(int [] array) {
-		// Queue<Integer> odd = new LinkedList<>();
-		// Queue<Integer> even = new LinkedList<>();
-		// for (int i = 0; i<array.length; i++) {
-		// 	if (array[i] % 2 == 0) {
-		// 		even.offer(array[i]);
-		// 	} else {
-		// 		odd.offer(array[i]);
-		// 	}
-		// }
-
-		// int i = 0;
-		// while (!odd.isEmpty()) {
-		// 	array[i] = odd.poll();
-		// 	i++;
-		// }
-		// while (!even.isEmpty()) {
-		// 	array[i] = even.poll();
-		// 	i++;
-		// }
-
-		// //使用插入排序实现
-		// for (int j = 0 ; j < array.length; j++) {
-		// 	if (array[j] %2 == 1) {
-
-		// 	}
-		// }
-        //
         // 使用插入排序
         for (int i = 1; i < array.length; i++) {
             if (array[i]%2 == 1) {
@@ -118,5 +89,94 @@ public class main {
         } 
         
 	}
+
+
+	/**
+	 * 输入一个字符串,按字典序打印出该字符串中字符的所有排列。
+	 * 例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+	 * @输入描述 输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。
+	 */
+	public static ArrayList<String> Permutation(String str) {
+		ArrayList<String> res = new ArrayList<>();
+		if (str.length() == 0 || str == null) {
+			return res;
+		}
+		Set<String> result = new HashSet<>();
+		char[] chars = str.toCharArray();
+		permutation(chars, result, 0);
+		res.addAll(result);
+		Collections.sort(res);
+		return res;
+
+	}
+
+	public static void permutation(char[] str, Set<String> result, int begin) {
+		if (str.length - begin <= 1 ) {
+			result.add(new String(str));
+			return;
+		}
+
+		for (int i = begin; i < str.length; i++) {
+			swap(str, begin, i);
+			permutation(str, result, begin+1);
+			swap(str,i, begin);
+		}
+
+		return;
+
+	}
+
+	public static void swap(char[] str, int i, int j) {
+		char temp = str[i];
+		str[i] = str[j];
+		str[j] = temp;
+	}
+
+	/**
+	 * 请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。
+	 * 路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。
+	 * 如果一条路径经过了矩阵中的某一个格子，则之后不能再次进入这个格子。
+	 * 例如 a b c e s f c s a d e e 这样的3 X 4 矩阵中包含一条字符串"bcced"的路径，
+	 * 但是矩阵中不包含"abcb"路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。
+	 */
+	public static boolean hasPath(char[] matrix, int rows, int cols, char[] str)
+	{
+		boolean[] isVisited = new boolean[matrix.length];
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				//分别用矩阵中的每个位置都作为起点
+				if (hasPathHelper(matrix, rows, cols, i, j, str, 0, isVisited)) {
+					return true;
+				}
+
+			}
+		}
+		return false;
+	}
+
+	public static boolean hasPathHelper(char[] matrix, int rows, int cols, int startaRow, int startCol, char[] str, int index, boolean[] isVisited) {
+		if (index == str.length) {
+			return true;
+		}
+		if (startaRow < 0 || startaRow >= rows || startCol < 0 || startCol >= cols) {
+			//已全部找完都没有找到
+			return false;
+		}
+
+		int crrPos = startaRow*cols+startCol;
+		boolean result = false;
+		if (matrix[crrPos] == str[index] && !isVisited[crrPos]) {
+			isVisited[crrPos] = true;
+			result = hasPathHelper(matrix, rows, cols, startaRow-1, startCol, str, index+1, isVisited) ||
+					 hasPathHelper(matrix, rows, cols, startaRow, startCol+1, str, index+1, isVisited) ||
+					 hasPathHelper(matrix, rows, cols, startaRow, startCol-1, str, index+1, isVisited) ||
+					 hasPathHelper(matrix, rows, cols, startaRow+1, startCol, str, index+1, isVisited);
+			isVisited[crrPos] = false; //这一步就是用来回溯的，恢复到没走过的状态。
+		}
+		return result;
+	}
+
+
+
 
 }
