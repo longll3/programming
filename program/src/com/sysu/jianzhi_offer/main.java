@@ -5,13 +5,30 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 
+import com.sysu.jianzhi_offer.selfStack;
+
 public class main {
     public static void main(String[] args) {
 
 
-		char[] matrix = {'a', 'b', 'c', 'e', 's', 'f', 'c', 's', 'a', 'd', 'e', 'e'};
-		char[] str = {'b','c','c','e','d'};
-		System.out.println(hasPath(matrix, 3, 4, str));
+		selfStack stack = new selfStack();
+		stack.push(3);
+		System.out.println(stack.min());
+        stack.push(4);
+        System.out.println(stack.min());
+        stack.push(2);
+        System.out.println(stack.min());
+        stack.push(3);
+        System.out.println(stack.min());
+        stack.pop();
+        System.out.println(stack.min());
+        stack.pop();
+        System.out.println(stack.min());
+        stack.pop();
+        System.out.println(stack.min());
+        stack.push(0);
+        System.out.println(stack.min());
+
 
 
     }
@@ -176,7 +193,68 @@ public class main {
 		return result;
 	}
 
+	/**
+	 * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，
+	 * 例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+	 * 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
+	 */
+	public static ArrayList<Integer> printMatrix(int [][] matrix) {
+		ArrayList<Integer> res = new ArrayList<>();
+		int i = 0, j = 0;
+		int rows = matrix.length;
+		int cols = matrix[0].length;
 
+		int size = rows*cols;
+
+		if (rows == 0 || cols == 0) return res;
+
+		int count = 0; //遍历过的数目
+
+		int left_up = 0, left_down = -1, right_up = cols, right_down = rows;
+		while (count < size) {
+			//从左往右
+			for (; j < right_up && count < size; j++) {
+				count ++;
+				res.add(matrix[i][j]);
+			}
+			right_up--;
+			j--;
+			i++;
+
+			//从上往下
+			for (; i < right_down && count < size; i++) {
+				count ++;
+				res.add(matrix[i][j]);
+			}
+			right_down--;
+			i--;
+			j--;
+
+
+			//从右往左
+			for (; j > left_down && count < size; j--) {
+				count ++;
+				res.add(matrix[i][j]);
+			}
+			left_down++;
+			j++;
+			i--;
+
+			//从下往上
+			for (; i > left_up && count < size; i--) {
+				count ++;
+				res.add(matrix[i][j]);
+			}
+			left_up++;
+			i++;
+			j++;
+
+
+
+		}
+
+		return res;
+	}
 
 
 }
