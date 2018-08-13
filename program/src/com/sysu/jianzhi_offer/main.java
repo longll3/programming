@@ -1,9 +1,6 @@
 package com.sysu.jianzhi_offer;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 import com.sysu.jianzhi_offer.selfStack;
 
@@ -11,24 +8,23 @@ public class main {
     public static void main(String[] args) {
 
 
-		selfStack stack = new selfStack();
-		stack.push(3);
-		System.out.println(stack.min());
-        stack.push(4);
-        System.out.println(stack.min());
-        stack.push(2);
-        System.out.println(stack.min());
-        stack.push(3);
-        System.out.println(stack.min());
-        stack.pop();
-        System.out.println(stack.min());
-        stack.pop();
-        System.out.println(stack.min());
-        stack.pop();
-        System.out.println(stack.min());
-        stack.push(0);
-        System.out.println(stack.min());
+		Queue<TreeNode> q = new LinkedList<>();
+		TreeNode a = null;
+		TreeNode b = new TreeNode(1);
+		TreeNode c = new TreeNode(2);
+		TreeNode d = new TreeNode(3);
 
+		q.add(b);
+		q.add(c);
+		q.add(a);
+		q.add(d);
+
+		System.out.println(q.poll());
+		System.out.println(q.poll());
+		System.out.println(q.poll());
+		System.out.println(q.poll());
+
+		int l = q.size();
 
 
     }
@@ -128,6 +124,7 @@ public class main {
 	}
 
 	public static void permutation(char[] str, Set<String> result, int begin) {
+		//到了最后一个字符时，就不用在分了
 		if (str.length - begin <= 1 ) {
 			result.add(new String(str));
 			return;
@@ -136,7 +133,7 @@ public class main {
 		for (int i = begin; i < str.length; i++) {
 			swap(str, begin, i);
 			permutation(str, result, begin+1);
-			swap(str,i, begin);
+			swap(str,i, begin); // 要复位，不然上一步的交换会使原始字符串发生变化，那么在分割的时候就会漏掉很多情况
 		}
 
 		return;
@@ -254,6 +251,31 @@ public class main {
 		}
 
 		return res;
+	}
+
+
+	/**
+	 * @breif 输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。
+	 * 假设压入栈的所有数字均不相等。
+	 * 例如序列1,2,3,4,5是某栈的压入顺序，
+	 * 序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。
+	 * （注意：这两个序列的长度是相等的）
+	 */
+	public boolean IsPopOrder(int [] pushA,int [] popA) {
+		if (popA.length == 0) return true;
+
+		Stack<Integer> s = new Stack<>();
+		for (int i = 0, j=0; i < pushA.length;i++) {
+			s.push(pushA[i]);
+			while (j < popA.length && s.peek() == popA[j]) {
+				s.pop();
+				j++;
+			}
+		}
+
+		if (s.empty()) return true;
+		else return false;
+
 	}
 
 
