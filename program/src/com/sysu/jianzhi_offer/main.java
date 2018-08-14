@@ -8,23 +8,9 @@ public class main {
     public static void main(String[] args) {
 
 
-		Queue<TreeNode> q = new LinkedList<>();
-		TreeNode a = null;
-		TreeNode b = new TreeNode(1);
-		TreeNode c = new TreeNode(2);
-		TreeNode d = new TreeNode(3);
 
-		q.add(b);
-		q.add(c);
-		q.add(a);
-		q.add(d);
 
-		System.out.println(q.poll());
-		System.out.println(q.poll());
-		System.out.println(q.poll());
-		System.out.println(q.poll());
-
-		int l = q.size();
+		ArrayList<ArrayList<Integer>> a = FindContinuousSequence(3);
 
 
     }
@@ -276,6 +262,33 @@ public class main {
 		if (s.empty()) return true;
 		else return false;
 
+	}
+
+	/**
+	 * @brief 找出所有和为S的连续正数序列
+	 */
+	public static ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
+		ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
+		int border = sum/2;
+		int x=1;
+		while (x <= border) {
+			int n = 2;
+			int tmp = x*n + (n*(n-1) / 2);
+			while (tmp < sum) {
+				n++;
+				tmp = x*n + (n*(n-1) / 2);
+			}
+			if (tmp == sum) {
+				ArrayList<Integer> arr = new ArrayList<>();
+				for (int i = x; i <= (x+n-1); i++) {
+					arr.add(i);
+				}
+				res.add(arr);
+				//x = x+n-1; sum = 19时，不可以
+			}
+			x++;
+		}
+		return res;
 	}
 
 
