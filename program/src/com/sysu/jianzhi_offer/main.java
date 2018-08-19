@@ -339,4 +339,33 @@ public class main {
 		}
 	}
 
+	/**
+	 * 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]。不能使用除法。
+	 */
+	public int[] multiply(int[] A) {
+		int[] b = new int[A.length];
+//		int[] first = new int[A.length]; // first[i] = 1*A[0]*A[1]*...A[i-1];
+//		int[] second = new int[A.length]; // second[i] = A[n-1]*A[n-2]*...*A[i+1]*1;
+		for (int i = 0; i < A.length; i++) {
+			if (i == 0) {
+				b[i] = 1;
+			} else {
+				b[i] = A[i-1]*b[i-1];
+			}
+		}
+
+		int second = 0;
+		for (int i = A.length-1; i >= 0; i--) {
+			if (i == A.length-1) {
+				second = 1;
+				b[i] = second*b[i];
+			} else {
+				second = second * A[i+1];
+				b[i] *= second;
+			}
+		}
+
+		return b;
+	}
+
 }
