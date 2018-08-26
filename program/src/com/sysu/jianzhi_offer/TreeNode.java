@@ -1,9 +1,11 @@
 package com.sysu.jianzhi_offer;
 
 import java.net.ConnectException;
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class TreeNode {
     int val = 0;
@@ -144,12 +146,71 @@ public class TreeNode {
 
             }
 
-
-
             return null;
         }
     }
 
+    /**
+     * 输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。
+     * 路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+     * (注意: 在返回值的list中，数组长度大的数组靠前)
+     */
+    public static ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target) {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
+        ArrayList<Integer> trace = new ArrayList<>();
+        if (root == null) {
+            return lists;
+        }
+        DFSWithCounter(root, target, lists, trace);
+        return lists;
+    }
 
+    public static void DFSWithCounter(TreeNode root, int sum, ArrayList<ArrayList<Integer>> lists, ArrayList<Integer> trace) {
+
+        trace.add(root.val);
+        if (root.left == null && root.right == null) {
+            //是叶子结点
+            if (root.val == sum) {
+                lists.add(new ArrayList<>(trace));
+            }
+            trace.remove(trace.size()-1);
+            return;
+        }
+
+        if (root.left != null) {
+            DFSWithCounter(root.left, sum-root.val, lists, trace);
+        }
+
+        if (root.right != null) {
+            DFSWithCounter(root.left, sum-root.val, lists, trace);
+        }
+
+        trace.remove(trace.size()-1);
+
+
+    }
+
+
+    /**
+     * DFS 非递归
+     * @param root
+     * @return
+     */
+    public ArrayList<Integer> DFS(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if (root == null) {
+            return list;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            //先右后左，出栈的时候才是先左后右
+            if (node.right != null) stack.push(node.right);
+            if (node.left != null) stack.push(node.left);
+            list.add(node.val);
+        }
+        return list;
+    }
 
 }
