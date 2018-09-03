@@ -96,25 +96,6 @@ public class TreeNode {
         return res;
     }
 
-    /**
-     * 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
-     */
-//    public TreeNode Convert(TreeNode pRootOfTree) {
-//
-//
-//
-//
-//    }
-
-//    public TreeNode Link(TreeNode node) {
-//        if (node == null) return null;
-//
-//        TreeNode left = Link(node.left);
-//        left.left = node;
-//        node.right = Link(node.right);
-//
-//        return
-//    }
 
     /**
      * 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
@@ -211,6 +192,43 @@ public class TreeNode {
             list.add(node.val);
         }
         return list;
+    }
+
+    /**
+     * 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+     * @param pRootOfTree
+     * @return
+     *
+     * 1.将左子树构造成双链表，并返回链表头节点。
+     * 2.定位至左子树双链表最后一个节点。
+     * 3.如果左子树链表不为空的话，将当前root追加到左子树链表。
+     * 4.将右子树构造成双链表，并返回链表头节点。
+     * 5.如果右子树链表不为空的话，将该链表追加到root节点之后。
+     * 6.根据左子树链表是否为空确定返回的节点。
+     */
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        if (pRootOfTree == null) return pRootOfTree;
+        if (pRootOfTree.left == null && pRootOfTree.right == null) return pRootOfTree;
+        TreeNode left = Convert(pRootOfTree.left);
+        TreeNode leftTail = left;
+        //找到左子树的最后一个结点，与pRootOfTree相连
+        while (leftTail != null && leftTail.right != null) {
+            leftTail = leftTail.right;
+        }
+        if (left != null) {
+            pRootOfTree.left = leftTail;
+            leftTail.right = pRootOfTree;
+        }
+
+        TreeNode right = Convert(pRootOfTree.right);
+        if (right != null) {
+            pRootOfTree.right = right;
+            right.left = pRootOfTree;
+        }
+
+        if (left == null) return pRootOfTree;
+        else return left;
+
     }
 
 }
