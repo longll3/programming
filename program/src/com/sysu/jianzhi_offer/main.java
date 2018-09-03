@@ -5,27 +5,7 @@ import java.util.*;
 import com.sysu.jianzhi_offer.selfStack;
 
 public class main {
-    public static void main(String[] args) {
 
-
-
-
-		TreeNode root = new TreeNode(5);
-		TreeNode left = new TreeNode(4);
-		root.left = left;
-		left = root.left;
-		left.left = new TreeNode(3);
-		left = left.left;
-		left.left = new TreeNode(2);
-		left = left.left;
-		left.left = new TreeNode(1);
-
-		ArrayList<ArrayList<Integer>> lists = TreeNode.FindPath(root, 15);
-
-
-
-
-    }
 
     /**
      * 我们可以用2*1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2*1的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？
@@ -400,5 +380,37 @@ public class main {
 
 		}
 		return array[left];
+	}
+
+
+	/**
+	 * 数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。
+	 * 例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。
+	 */
+	public static int MoreThanHalfNum_Solution(int [] array) {
+		int count[] = new int[array.length];
+		for (int i = 0 ; i < array.length; i++) {
+			int index = i;
+			for (int j = 0; j < i; j++) {
+				if (array[j] == array[i]) {
+					index = j;
+					break;
+				}
+			}
+			count[index]++;
+		}
+
+		for (int i = 0; i < array.length; i++) {
+			if (count[i] > array.length/2) {
+				return(array[i]);
+			}
+		}
+		return 0;
+	}
+
+	public static void main(String[] args) {
+		int a[] = {1,2,3,2,2,2,5,4,2};
+		System.out.println(MoreThanHalfNum_Solution(a));
+
 	}
 }
