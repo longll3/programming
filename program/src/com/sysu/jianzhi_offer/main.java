@@ -2,6 +2,7 @@ package com.sysu.jianzhi_offer;
 
 import java.util.*;
 
+import com.sun.scenario.animation.AbstractMasterTimer;
 import com.sysu.jianzhi_offer.selfStack;
 
 public class main {
@@ -408,9 +409,31 @@ public class main {
 		return 0;
 	}
 
+	/**
+	 * 计算连续子向量的最大和
+	 * 例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。
+	 * 给一个数组，返回它的最大连续子序列的和，你会不会被他忽悠住？(子向量的长度至少是1)
+	 */
+	public static int FindGreatestSumOfSubArray(int[] array) {
+		int dp[] = new int[array.length];
+		int max = Integer.MIN_VALUE;
+		for (int i = 0; i < array.length; i++) {
+			if (i == 0) dp[i] = array[i];
+			else {
+				if (dp[i-1] + array[i] > array[i]) dp[i] = dp[i-1] + array[i];
+				else dp[i] = array[i];
+			}
+
+			if (max < dp[i]) max = dp[i];
+		}
+
+		return max;
+
+	}
+
 	public static void main(String[] args) {
-		int a[] = {1,2,3,2,2,2,5,4,2};
-		System.out.println(MoreThanHalfNum_Solution(a));
+		int a[] = {1,-2,3,10,-4,7,2,-5};
+		System.out.println(FindGreatestSumOfSubArray(a));
 
 	}
 }
