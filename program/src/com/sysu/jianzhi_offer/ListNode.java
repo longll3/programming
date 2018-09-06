@@ -137,6 +137,52 @@ public class ListNode {
         if (list1 == null) curr.next = list2;
         if (list2 == null) curr.next = list1;
         return head;
+    }
+
+    /**
+     * 输入两个链表，找出它们的第一个公共结点。
+     * @param pHead1
+     * @param pHead2
+     * @return
+     */
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+        //先求出两个链表的长度差
+        int lengthOfList1 = 0;
+        int lengthOfList2 = 0;
+        ListNode p1 = pHead1;
+        ListNode p2 = pHead2;
+        while (p1 != null) {
+            lengthOfList1 ++;
+            p1 = p1.next;
+        }
+        while (p2 != null) {
+            lengthOfList2 ++;
+            p2 = p2.next;
+        }
+
+        //然后将较长的链表的指针先走k步
+        p1 = pHead1;
+        p2 = pHead2;
+        int k = lengthOfList1 - lengthOfList2 > 0 ? (lengthOfList1 - lengthOfList2) : (lengthOfList2 - lengthOfList1);
+        if (lengthOfList1 > lengthOfList2) {
+            while (k > 0 ) {
+                p1 = p1.next;
+                k--;
+            }
+        } else {
+            while (k > 0 ) {
+                p2 = p2.next;
+                k--;
+            }
+        }
+
+        while (p1 != null && p2 != null && p1 != p2) {
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+
+        return p1;
+
 
     }
 

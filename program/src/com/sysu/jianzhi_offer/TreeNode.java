@@ -166,6 +166,7 @@ public class TreeNode {
             DFSWithCounter(root.left, sum-root.val, lists, trace);
         }
 
+        //用来回溯的
         trace.remove(trace.size()-1);
 
 
@@ -230,5 +231,30 @@ public class TreeNode {
         else return left;
 
     }
+
+
+    /**
+     * 输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+     * @param  root [description]
+     * @return      [description]
+     */
+    public static int TreeDepth(TreeNode root) {
+        //假如是空节点，则返回0；
+        if (root == null) return 0;
+
+        /**
+         * 否则，原树的深度由左右子树中深度较的深度加1，为原树的深度。
+         */
+        if (root.left == null && root.right == null) {
+            return 1;
+        }
+
+        int leftDeep = TreeDepth(root.left);
+        int rightDeep = TreeDepth(root.right);
+
+        return leftDeep > rightDeep ? leftDeep + 1 : rightDeep + 1;
+
+    }
+
 
 }

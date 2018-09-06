@@ -480,11 +480,66 @@ public class main {
 	}
 
 
+	/**
+	 * 在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 
+	 * 如果没有则返回 -1（需要区分大小写）.
+	 *
+     * 另一种方法，可以使用一个长度为26*2的数组（大小写），模仿map
+     *
+	 * @param str
+	 */
+	public static int FirstNotRepeatingChar(String str) {
+		Map<Character, Integer> map = new HashMap<>();
+		for (int i = 0; i < str.length(); i++) {
+			if (map.containsKey(str.charAt(i))) {
+				int j = map.get(str.charAt(i));
+				map.put(str.charAt(i), j+1);
+			} else {
+				map.put(str.charAt(i), 1);
+			}
+		}
+		for (int i = 0; i < str.length(); i++) {
+			if (map.get(str.charAt(i)) == 1) return i;
+		}
+        return -1;
+    }
 
+    /**
+     * 统计一个数字在排序数组中出现的次数。
+     * @param  array [description]
+     * @param  k     [description]
+     * @return       [description]
+     */
+    public int GetNumberOfK(int [] array , int k) {
+    	int count = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == k) {
+            	while (i < array.length && array[i] == k) {
+            		count++;
+            		i++;
+            	}
+            	break;
+            }
+        }
+        return count;
+    }
 
 	public static void main(String[] args) {
-		int a[] = {3,321,323};
-		System.out.println(PrintMinNumber(a));
+		TreeNode root = new TreeNode(1);
+		TreeNode node1 = new TreeNode(2);
+		TreeNode node2 = new TreeNode(3);
+		TreeNode node3 = new TreeNode(4);
+		TreeNode node4 = new TreeNode(5);
+		TreeNode node5 = new TreeNode(6);
+		TreeNode node6 = new TreeNode(7);
+		root.left = node1;
+		root.right = node2;
+		node1.left = node3;
+		node1.right = node4;
+		node3.right = node5;
+		node2.right = node6;
+
+        System.out.println(TreeNode.TreeDepth(root));
 
 	}
 }
