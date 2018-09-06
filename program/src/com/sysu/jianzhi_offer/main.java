@@ -431,9 +431,60 @@ public class main {
 
 	}
 
+	/**
+	 * 求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。
+	 * ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。
+	 * @param n
+	 * @return
+	 * 数学归纳法：找到规律，如个位上的1 的个数为：（n/10)*1 + (if (n % 10 > 1) 1 else ( if (n%10 < 1) 0 else (n%10 - 1 + 1)))
+	 *                    如十位上的1 的个数为：（n/100)*10 + (if (n % 100 > 19) 10 else ( if (n%100 < 10) 0 else (n%100 - 10 + 1)))
+	 *                    如百位上的1 的个数为：（n/1000)*100 + (if (n % 1000 > 199) 100 else ( if (n%1000 < 100) 0 else (n%10 - 100 + 1)))
+	 */
+	public static int NumberOf1Between1AndN_Solution(int n) {
+
+		int tmp = 1;
+		int count = 0;
+		while (tmp <= n) {
+			int remainder = n % (tmp*10);
+			int quotient = n / (tmp*10);
+			count += quotient * tmp + Math.min(tmp, Math.max(0, remainder-tmp+1));
+			tmp *= 10;
+
+		}
+		return count;
+	}
+
+	/**
+	 * 输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+	 * 例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+	 * @param numbers
+	 * @return
+	 */
+	public static String PrintMinNumber(int [] numbers) {
+		ArrayList<Integer> arr = new ArrayList<>();
+		for (int i = 0; i < numbers.length; i++) {
+			arr.add(numbers[i]);
+		}
+		Collections.sort(arr, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				String s1 = ""+o1 + o2;
+				String s2 = ""+o2 + o1;
+				return s1.compareTo(s2);
+			}
+		});
+
+		String res = "";
+		for (Integer item : arr) res += item;
+		return res;
+	}
+
+
+
+
 	public static void main(String[] args) {
-		int a[] = {1,-2,3,10,-4,7,2,-5};
-		System.out.println(FindGreatestSumOfSubArray(a));
+		int a[] = {3,321,323};
+		System.out.println(PrintMinNumber(a));
 
 	}
 }
