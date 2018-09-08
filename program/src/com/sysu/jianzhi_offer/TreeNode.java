@@ -1,7 +1,5 @@
 package com.sysu.jianzhi_offer;
 
-import java.net.ConnectException;
-import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -254,6 +252,32 @@ public class TreeNode {
 
         return leftDeep > rightDeep ? leftDeep + 1 : rightDeep + 1;
 
+    }
+
+    /**
+     * 输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+     * @param root
+     * @return
+     */
+    public boolean IsBalanced_Solution(TreeNode root) {
+        if (root == null) return  true;
+
+        int left = getDeep(root.left, 0);
+        int right = getDeep(root.right, 0);
+        if (left - right > 1 || left - right < -1) {
+            return false;
+        }
+        IsBalanced_Solution(root.left);
+        IsBalanced_Solution(root.right);
+
+        return true;
+
+    }
+
+    public int getDeep(TreeNode root, int deep) {
+        if (root == null ) return deep;
+        return (getDeep(root.left, deep+1) > getDeep(root.right, deep+1)) ?
+                getDeep(root.left, deep+1) : getDeep(root.right, deep+1);
     }
 
 

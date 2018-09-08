@@ -524,6 +524,83 @@ public class main {
         return count;
     }
 
+	/**
+	 * 一个整型数组里除了两个数字之外，其他的数字都出现了偶数次。请写程序找出这两个只出现一次的数字。
+	 * @param array
+	 * @param num1
+	 * @param num2
+	 */
+	//num1,num2分别为长度为1的数组。传出参数
+	//将num1[0],num2[0]设置为返回结果
+	public static void FindNumsAppearOnce(int [] array,int num1[] , int num2[]) {
+		//所有值一起异或，相同的数异或为0， 不同的数异或肯定不全为0；
+		int tmp = 0;
+		for (int num: array) tmp ^= num;
+
+		//找到tmp中为1的那一位，说明不同的那两个数在那一位上一定不同，异或才能为1；
+		int index = 0; //标记1的位置,从左往右开始
+		while ( (tmp & ( 1 << index)) == 0) index++;
+
+		//根据这一位是否为1将数据分为2部分，每部分都一直异或，留下来的就是其中一个只出现了一次的数了；
+		for (int num : array) {
+			if ((num & (1<< index)) == 0) {
+				num1[0] ^= num;
+			} else {
+				num2[0] ^= num;
+			}
+
+		}
+		return;
+
+	}
+
+    /**
+     * 输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的。
+     * 对应每个测试案例，输出两个数，小的先输出。
+     * @param array
+     * @param sum
+     * @return
+     */
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        ArrayList<Integer> res = new ArrayList<>();
+        if (array == null || array.length == 0) {
+            return res;
+        }
+
+        int border = sum / 2;
+        //从前往后遍历，遇到>= sum/2的数就可以停止了；同时从后往前，寻找另一个；
+        //相差越远，乘积越小
+        int front = 0;
+        int end = array.length-1;
+
+        while (front <= end && array[front] < border) {
+            int biggerNum = sum - array[front];
+            while ( array[end] > biggerNum) end--;
+            if (array[end] == biggerNum) {
+                res.add(array[front]);
+                res.add(array[end]);
+                break;
+            }
+            front++;
+        }
+
+        return res;
+
+    }
+
+	/**
+	 * 对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。
+	 */
+	public String LeftRotateString(String str,int n) {
+		int len = str.length();
+		if (len == 0) return "";
+
+		str += str;
+
+		return str.substring(n,len+n);
+	}
+
+
 	public static void main(String[] args) {
 		TreeNode root = new TreeNode(1);
 		TreeNode node1 = new TreeNode(2);
@@ -539,7 +616,11 @@ public class main {
 		node3.right = node5;
 		node2.right = node6;
 
-        System.out.println(TreeNode.TreeDepth(root));
+		int arr[] = {2,4,3,6,3,2,5,5};
+		int num1[] = new int[1];
+		int num2[] = new int[1];
+
+        FindNumsAppearOnce(arr, num1, num2);
 
 	}
 }
