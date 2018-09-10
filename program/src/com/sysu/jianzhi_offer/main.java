@@ -614,26 +614,73 @@ public class main {
 		 */
 		if (str == null || str.length() == 0) return "";
 
-		StringBuilder sb = new StringBuilder();
+		char[] words = str.toCharArray();
+		reverse(words, 0, words.length-1);
 
-		String[] words = str.split(" ");
-		if (words.length == 0) {
-			return str;
-		} else {
+		int begin = 0, end = 0;
+		for (int i = 0; i < words.length; i++) {
+		    if (words[i] == ' ') {
+		        end = i-1;
+		        reverse(words, begin, end);
+		        begin = i+1;
+            }
+        }
 
-			for (int i = words.length-1; i >= 0; i--) {
-				sb.append(words[i]);
-				if (i > 0) {
-					sb.append(" ");
-				}
-			}
-		}
+        //因为最后一个单词后面没有空格，所以在for循环中不能reverse最后一个单词，要单独reverse
+        reverse(words, begin, words.length-1);
 
-
-		return sb.toString();
+		return new String(words);
 
 	}
 
+    /**
+     * 将char数组中的char翻转
+     * @param chars 要翻转的字符串，翻转范围：【begin， end】
+     */
+	public static void reverse(char[] chars, int begin, int end) {
+	    for (int i = begin, j = end; i < j; i++, j--) {
+	        char tmp = chars[i];
+	        chars[i] = chars[j];
+	        chars[j] = tmp;
+        }
+        return;
+    }
+
+    /**
+     * 首先,让小朋友们围成一个大圈。随机指定一个数m,让编号为0的小朋友开始报数。
+     * 每次喊到m-1的那个小朋友要出列唱,并且不再回到圈中,
+     * 从他的下一个小朋友开始,继续0...m-1报数....这样下去....直到剩下最后一个小朋友.
+     * 哪个小朋友是最后一个小朋友？(注：小朋友的编号是从0到n-1)
+     */
+    public static int LastRemaining_Solution(int n, int m) {
+        int children[] = new int[n];
+        int count = 0;
+
+        int index= 0;
+        while (count < n-1 ) {
+            int num = 0;
+            while (true) {
+                if (children[index] == 0) {
+                    num++;
+                    if (num == m) {
+                        break;
+                    }
+                }
+                index = (index+1)%n;
+
+            }
+            count++;
+            children[index] = 1;
+            index = (index+1)%n;
+
+        }
+        for (int i = 0; i < n; i++) {
+            if (children[i] == 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
 
 	public static void main(String[] args) {
 		TreeNode root = new TreeNode(1);
@@ -654,7 +701,7 @@ public class main {
 		int num1[] = new int[1];
 		int num2[] = new int[1];
 
-        System.out.println(ReverseSentence(" "));
+        System.out.println(LastRemaining_Solution(5, 3));
 
 	}
 
