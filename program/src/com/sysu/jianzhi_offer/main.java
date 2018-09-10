@@ -601,6 +601,40 @@ public class main {
 	}
 
 
+	/**
+	 * 反转单词序列
+	 * 如：students. a am i
+	 * 反转为: i am a students
+	 * @param str
+	 * @return
+	 */
+	public static String ReverseSentence(String str) {
+		/**
+		 * 可以先将整个str都反转一遍，再根据空格确定每个单词的首位，将每个单词都反转一遍
+		 */
+		if (str == null || str.length() == 0) return "";
+
+		StringBuilder sb = new StringBuilder();
+
+		String[] words = str.split(" ");
+		if (words.length == 0) {
+			return str;
+		} else {
+
+			for (int i = words.length-1; i >= 0; i--) {
+				sb.append(words[i]);
+				if (i > 0) {
+					sb.append(" ");
+				}
+			}
+		}
+
+
+		return sb.toString();
+
+	}
+
+
 	public static void main(String[] args) {
 		TreeNode root = new TreeNode(1);
 		TreeNode node1 = new TreeNode(2);
@@ -620,7 +654,9 @@ public class main {
 		int num1[] = new int[1];
 		int num2[] = new int[1];
 
-        FindNumsAppearOnce(arr, num1, num2);
+        System.out.println(ReverseSentence(" "));
 
 	}
+
+
 }
