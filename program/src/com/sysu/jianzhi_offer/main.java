@@ -682,6 +682,41 @@ public class main {
         return 0;
     }
 
+    /**
+     * 写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号。
+     */
+    public int Add(int num1,int num2) {
+        int sum;
+        int carry; // 进位
+        sum = num1 ^ num2; // 两个数做异或，也就是相加的同时忽略进位
+        carry = (num1 & num2) << 1; //得到两个数进位的结果
+        while (carry != 0) {
+            int sumTmp = sum;
+            sum = sum ^ carry;
+            carry = (sumTmp & carry) << 1;
+        }
+
+        return sum;
+    }
+
+    /**
+     * 题目："求1+2+3+...+n"
+     * 求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+     * @param n
+     * @return
+     */
+    public int Sum_Solution(int n) {
+        //第一种：
+        //return (int)(Math.pow(n, 2)+n) >> 1;
+
+        //第二种，利用短路求值
+        boolean flag = (n > 0) && (n = Sum_Solution(n-1)+n) != 0;
+        return n;
+    }
+
+
+
+
 	public static void main(String[] args) {
 		TreeNode root = new TreeNode(1);
 		TreeNode node1 = new TreeNode(2);
@@ -701,9 +736,11 @@ public class main {
 		int num1[] = new int[1];
 		int num2[] = new int[1];
 
-        System.out.println(LastRemaining_Solution(5, 3));
+		int n = 2;
+        System.out.println(1&(2|0));
 
 	}
 
 
 }
+
