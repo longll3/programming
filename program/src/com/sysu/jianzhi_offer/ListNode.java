@@ -186,4 +186,75 @@ public class ListNode {
 
     }
 
+    /**
+     * 给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
+     * @param pHead
+     * @return
+     */
+    public ListNode EntryNodeOfLoop(ListNode pHead)
+    {
+        //首先确定有没有环
+        ListNode hasLoop = checkHasLoop(pHead);
+        if (hasLoop == null) return null;
+
+        //确定环中节点的个数
+        //再次遇到在环中的结点hasLoop就走完了一个环。计数结束
+        ListNode tmp = hasLoop.next;
+        int count = 1;
+        while (tmp != hasLoop) {
+            count++;
+            tmp = tmp.next;
+        }
+
+        //找到环的入口节点
+        ListNode firstPtr = pHead;
+        ListNode secondPtr = pHead;
+        //先走count个结点
+        while (count > 0) {
+            count--;
+            firstPtr = firstPtr.next;
+        }
+        /**
+         * 然后再一起走，相遇时就是环的入口
+         *
+         * 因为：假设总共n个结点，环中结点有count个，那么第n-count+1个结点就是环的入口结点
+         * firstPtr从pHead先走count步，来到第count+1个结点，
+         * secondPtr从pHead开始走n-count步，来到第n-count+1个结点，
+         * 此时firstPtr总共走了n步，来到n+1个几点，也就是会再次来到环的入口结点，因此他们相遇的时候一定是环的入口结点
+         */
+        while (firstPtr != secondPtr) {
+            firstPtr = firstPtr.next;
+            secondPtr = secondPtr.next;
+        }
+
+        return firstPtr;
+
+    }
+
+    /**
+     * 如果有环，则返回一个在环中的节点，没有则返回null
+     * @param head 头节点
+     */
+    public ListNode checkHasLoop(ListNode head) {
+        ListNode slowPtr = head;
+        ListNode quickPtr = head;
+        while (quickPtr != null) {
+            //走一步
+            slowPtr = slowPtr.next;
+
+            //走两步
+            quickPtr = quickPtr.next;
+            if (quickPtr != null) {
+                quickPtr = quickPtr.next;
+            } else {
+                break;
+            }
+
+            if (slowPtr == quickPtr) {
+                return slowPtr;
+            }
+        }
+        return null;
+    }
+
 }

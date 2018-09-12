@@ -714,7 +714,52 @@ public class main {
         return n;
     }
 
+	/**
+	 * 将一个字符串转换成一个整数(实现Integer.valueOf(string)的功能，但是string不符合数字要求时返回0)，要求不能使用字符串转换整数的库函数。
+	 * 数值为0或者字符串不是一个合法的数值则返回0。
+	 * @param str
+	 * @return
+	 */
+	public static int StrToInt(String str) {
+		if (str == null || str.length() == 0) {
+			return 0;
+		}
 
+		boolean minusSign = false;
+
+		int num = 0;
+		for (int i = 0; i < str.length(); i++) {
+            char firstBit = str.charAt(i);
+		    if (i == 0) {
+		        if (firstBit == '-') {
+		            minusSign = true;
+		            continue;
+                } else if (firstBit == '+') {
+		            continue;
+                } else if (!isNum(firstBit)) {
+		            //不是数字
+		            return 0;
+                }
+            }
+
+            if (!isNum(firstBit)) {
+                return 0;
+            } else {
+                num = num * 10 + firstBit-'0';
+            }
+
+
+		}
+        if (minusSign) return -num;
+		return num;
+	}
+
+	public static boolean isNum(char c) {
+	    if (c - '0' >= 0 && c -'0' <= 9) {
+	        return true;
+        }
+        return false;
+    }
 
 
 	public static void main(String[] args) {
@@ -736,8 +781,13 @@ public class main {
 		int num1[] = new int[1];
 		int num2[] = new int[1];
 
-		int n = 2;
-        System.out.println(1&(2|0));
+		System.out.println('1'&0xf);
+		System.out.println(0xf);
+		System.out.println('1'-'0');
+		System.out.println((byte)'1');
+		System.out.println((byte)'0');
+
+
 
 	}
 

@@ -1,59 +1,55 @@
 package com.sysu;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        while(sc.hasNext()) { // 这一句很重要！！！
-            int n = sc.nextInt();
-            int[] arr = new int[n];
+    public static ArrayList<String> list = new ArrayList<>();
 
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Main().new MyThread();
+        Thread t2 = new Thread(new Main().new MyRunnable());
+        t1.setPriority(3);
+        t2.setPriority(8);
+        t1.start();
+        t2.start();
+        t2.join();
 
-            for (int i = 0; i < n; i++) {
-                if (i > 0) {
-                    arr[i] = arr[i-1] + sc.nextInt();
-                } else {
-                    arr[i] = sc.nextInt();
-                }
-
-
-            }
-            int m = sc.nextInt();
-            for (int i = 0; i < m; i++) {
-                int q = sc.nextInt();
-
-                System.out.println(binary_find(arr, n, q) + 1);
-
-
-            }
+        for (int i = 0; i < 100000; i++) {
+            i++;
         }
+        list.add("main");
+
+        t1.join();
+
+        for (String s: list) {
+            System.out.println(s);
+        }
+
+
 
     }
 
-    public static int binary_find(int arr[], int length, int num) {
-        if (arr.length <= 0) {
-            return -1;
-        }
-        int i = 0;
-        int j = length - 1;
-        int mid;
-        while (i <= j) {
-            mid = (i + j) / 2;
-            if (arr[mid] == num) {
-                return mid;
-            } else if (arr[mid] > num) {
-                if (mid > i && arr[mid - 1] < num || mid == i) {
-                    return mid;
-                }
-                j = mid - 1;
-            } else {
-                i = mid + 1;
+
+    class MyThread extends Thread {
+        public void run() {
+            for (int i = 0; i < 100000; i++) {
+                i++;
             }
+            list.add("Thread 1");
         }
-        return -1;
     }
+
+    class MyRunnable implements Runnable {
+        public void run() {
+            for (int i = 0; i < 100000; i++) {
+                i++;
+            }
+            list.add("Thread 2");
+        }
+    }
+
 
 
     public static int getHeap(int [] count, int q) {
@@ -104,3 +100,17 @@ public class Main {
         return n1 * n2 / get_gcd(n1, n2);
     }
 }
+
+class A {
+    public static final String c = "JD";
+    static {
+        System.out.println("OK");
+    }
+}
+
+class B extends A {
+    static {
+        System.out.println("B");
+    }
+}
+
