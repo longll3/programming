@@ -1,6 +1,8 @@
 package com.sysu.jianzhi_offer;
 
 
+import java.util.LinkedList;
+
 public class ListNode {
     private int val;
     private ListNode next = null;
@@ -255,6 +257,72 @@ public class ListNode {
             }
         }
         return null;
+    }
+
+    /**题目：删除链表中重复的结点
+     * 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。
+     * 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+     */
+    public static ListNode deleteDuplication(ListNode pHead)
+    {
+        if (pHead == null || pHead.next == null) return pHead;
+
+        ListNode curPtr = pHead;
+        ListNode lastPtr = null;
+
+        while (curPtr != null && curPtr.next != null) {
+            ListNode tmp = curPtr.next;
+            if (tmp.val == curPtr.val) {
+                while (tmp != null && tmp.val == curPtr.val) {
+                    tmp = tmp.next;
+                }
+                //tmp是与curr不一样的下一个结点
+
+                if (lastPtr == null) {
+                    //如果头节点就是重复的
+                    pHead = tmp;
+
+                } else {
+                    lastPtr.next = tmp;
+                }
+
+                curPtr = tmp;
+            } else {
+                lastPtr = curPtr;
+                curPtr = curPtr.next;
+            }
+        }
+
+        return pHead;
+    }
+
+    //题目：删除链表中重复的结点 解法2：
+    //在头节点之前增加一个结点，在处理头节点的问题上会变得很容易
+    public static ListNode deleteDuplication2(ListNode pHead) {
+        if (pHead == null || pHead.next == null) {
+            return pHead;
+        }
+
+        ListNode beforeHead = new ListNode(-1); //这个值可以任意
+        beforeHead.next = pHead;
+
+        ListNode currPtr = pHead;
+        ListNode lastPtr = beforeHead;
+        while (currPtr != null && currPtr.next != null) {
+            ListNode tmp = currPtr.next;
+            if (tmp.val == currPtr.val) {
+                while (tmp!= null && tmp.val == currPtr.val) {
+                    tmp = tmp.next;
+                }
+                lastPtr.next = tmp;
+                currPtr = tmp;
+            } else {
+                lastPtr = currPtr;
+                currPtr = currPtr.next;
+            }
+        }
+
+        return beforeHead.next;
     }
 
 }
