@@ -329,34 +329,60 @@ public class main {
 		}
 	}
 
-	/**
+	/**题目：构建乘积数组
 	 * 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]。不能使用除法。
 	 */
-	public int[] multiply(int[] A) {
-		int[] b = new int[A.length];
-//		int[] first = new int[A.length]; // first[i] = 1*A[0]*A[1]*...A[i-1];
-//		int[] second = new int[A.length]; // second[i] = A[n-1]*A[n-2]*...*A[i+1]*1;
-		for (int i = 0; i < A.length; i++) {
-			if (i == 0) {
-				b[i] = 1;
-			} else {
-				b[i] = A[i-1]*b[i-1];
-			}
-		}
+	public static int[] multiply(int[] A) {
+	    if (A == null || A.length == 0) {
+	        return null;
+        }
 
-		int second = 0;
-		for (int i = A.length-1; i >= 0; i--) {
-			if (i == A.length-1) {
-				second = 1;
-				b[i] = second*b[i];
-			} else {
-				second = second * A[i+1];
-				b[i] *= second;
-			}
-		}
+        /**
+         * 方法1：利用两个数组分别保存从前至后和从后之前的累加
+         * *
+        //遍历第一遍，得到数组first，first[i] = A[0]*A[1]*...*A[i];
+        int[] first = new int[A.length];
+        for (int i = 0; i < A.length; i++) {
+            if (i == 0) first[i] = 1;
+            else first[i] = first[i-1]*A[i-1];
+        }
 
-		return b;
+        //遍历第二遍，得到数组second，second[i] = A[n-1]*A[n-2]*...*A[n-1];
+        int[] second = new int[A.length];
+        for (int i = A.length-1; i >= 0; i--) {
+            if (i == A.length-1) second[i] = 1;
+            else second[i] = second[i+1]*A[i+1];
+        }
+
+        //将两个数组中的数相乘
+        int[] res = new int[A.length];
+        for (int i = 0; i < A.length; i++) {
+            res[i] = first[i]*second[i];
+        }
+        */
+
+        /**
+         * 方法二：只用额外n的空间，从前往后遍历后，再之基础上从后往前累乘后部分 乘积（即second的）
+         */
+        int[] res = new int[A.length];
+        for (int i = 0; i < A.length; i++) {
+            if (i==0) res[i] = 1;
+            else res[i] = res[i-1]*A[i-1];
+        }
+
+        int second = 0; //保存第二部分
+        for (int i = A.length-1; i >= 0; i--) {
+            if (i == A.length-1) second = 1;
+            else {
+                second *= A[i+1];
+                res[i] *= second;
+            }
+        }
+
+        return res;
 	}
+
+
 
 	/**
 	 * 把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。
@@ -762,32 +788,48 @@ public class main {
     }
 
 
+    /**
+     * 题目：数组中重复的数字
+     * 在一个长度为n的数组里的所有数字都在0到n-1的范围内。
+     * 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。
+     * 请找出数组中任意一个重复的数字。
+     * 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是第一个重复的数字2。
+     * @param numbers
+     * @param length
+     * @param duplication
+     * @return
+     */
+    // Parameters:
+    //    numbers:     an array of integers
+    //    length:      the length of array numbers
+    //    duplication: (Output) the duplicated number in the array number,length of duplication array is 1,so using duplication[0] = ? in implementation;
+    //                  Here duplication like pointor in C/C++, duplication[0] equal *duplication in C/C++
+    //    这里要特别注意~返回任意重复的一个，赋值duplication[0]
+    // Return value:       true if the input is valid, and there are some duplications in the array number
+    //                     otherwise false
+    public static boolean duplicate(int numbers[],int length,int [] duplication) {
+        if (length == 0 || numbers == null) {
+            return false;
+        }
+
+        //先排序
+        Arrays.sort(numbers);
+
+        for (int i = 0; i < length-1; i++) {
+            if (numbers[i+1] == numbers[i]) {
+                duplication[0] = numbers[i];
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 	public static void main(String[] args) {
-		TreeNode root = new TreeNode(1);
-		TreeNode node1 = new TreeNode(2);
-		TreeNode node2 = new TreeNode(3);
-		TreeNode node3 = new TreeNode(4);
-		TreeNode node4 = new TreeNode(5);
-		TreeNode node5 = new TreeNode(6);
-		TreeNode node6 = new TreeNode(7);
-		root.left = node1;
-		root.right = node2;
-		node1.left = node3;
-		node1.right = node4;
-		node3.right = node5;
-		node2.right = node6;
 
-		int arr[] = {2,4,3,6,3,2,5,5};
-		int num1[] = new int[1];
-		int num2[] = new int[1];
-
-		System.out.println('1'&0xf);
-		System.out.println(0xf);
-		System.out.println('1'-'0');
-		System.out.println((byte)'1');
-		System.out.println((byte)'0');
-
-
+        int[] duplication = new int[1];
+        int[] numbers = {1,2,3,4,5};
+		System.out.println(multiply(numbers));
 
 	}
 
