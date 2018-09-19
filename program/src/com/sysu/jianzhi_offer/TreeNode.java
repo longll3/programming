@@ -280,5 +280,20 @@ public class TreeNode {
                 getDeep(root.left, deep+1) : getDeep(root.right, deep+1);
     }
 
+    /**
+     * 请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
+     */
+    boolean isSymmetrical(TreeNode pRoot) {
+        return isSymmetricalHelp(pRoot, pRoot);
+    }
+
+    boolean isSymmetricalHelp(TreeNode a, TreeNode b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        if (a.val != b.val) return false;
+
+        return isSymmetricalHelp(a.left, b.right) && isSymmetricalHelp(a.right, b.left);
+    }
+
 
 }
