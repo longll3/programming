@@ -1,9 +1,6 @@
 package com.sysu.jianzhi_offer;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class TreeNode {
     int val = 0;
@@ -293,6 +290,46 @@ public class TreeNode {
         if (a.val != b.val) return false;
 
         return isSymmetricalHelp(a.left, b.right) && isSymmetricalHelp(a.right, b.left);
+    }
+
+
+    /**
+     * 请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
+     */
+    public ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if (pRoot == null) return res;
+
+        //存基数层的，从左到右
+        Stack<TreeNode> odd = new Stack<>();
+        odd.push(pRoot);
+        //存偶数层的，从右到左
+        Stack<TreeNode> even = new Stack<>();
+
+        int depth = 1;
+        while (!odd.isEmpty() || !even.isEmpty()) {
+            ArrayList<Integer> tmp = new ArrayList<>();
+            if (!odd.isEmpty()) {
+                while (!odd.isEmpty()) {
+                    TreeNode node = odd.pop();
+                    if (node.left != null) even.push(node.left);
+                    if (node.right != null) even.push(node.right);
+                    tmp.add(node.val);
+                }
+            } else {
+                while (!even.isEmpty()) {
+                    TreeNode node = even.pop();
+                    if (node.right != null) odd.push(node.right);
+                    if (node.left != null) odd.push(node.left);
+                    tmp.add(node.val);
+                }
+            }
+
+            res.add(tmp);
+
+        }
+
+        return res;
     }
 
 
