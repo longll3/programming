@@ -296,7 +296,7 @@ public class TreeNode {
     /**
      * 请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
      */
-    public ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+    public ArrayList<ArrayList<Integer> > PrintZForm(TreeNode pRoot) {
         ArrayList<ArrayList<Integer>> res = new ArrayList<>();
         if (pRoot == null) return res;
 
@@ -327,6 +327,34 @@ public class TreeNode {
 
             res.add(tmp);
 
+        }
+
+        return res;
+    }
+
+    /**题目：把二叉树打印成多行
+     * 从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
+     * @param pRoot
+     * @return
+     */
+    public static ArrayList<ArrayList<Integer> > PrintLineByLine(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer> > res = new ArrayList<>();
+
+        if (pRoot == null) return res;
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.add(pRoot);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            int count = 0;
+            ArrayList<Integer> list = new ArrayList<>();
+            while (count < size) {
+                TreeNode node = queue.poll();
+                list.add(node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+                count++;
+            }
+            res.add(list);
         }
 
         return res;
