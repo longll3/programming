@@ -2,7 +2,6 @@ package com.sysu.jianzhi_offer;
 
 import java.util.*;
 
-import com.sun.scenario.animation.AbstractMasterTimer;
 import com.sysu.jianzhi_offer.selfStack;
 
 public class main {
@@ -825,11 +824,78 @@ public class main {
         return false;
     }
 
+	/**题目：数据流中的中位数
+	 * 如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。
+	 * 如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+	 * 我们使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
+	 * @param num
+	 */
+	public void Insert(Integer num) {
+		if ((count & 1) == 0) {
+			//插入前是偶数个，则在左边的最大堆插入
+			if (max.size() == 0) {
+				max.offer(num);
+			} else if (num < max.peek()) {
+				//如果最大堆不为空，并且num小于max堆顶元素，则将num放进左边的最大堆中
+				max.offer(num);
+			} else {
+				//num大于max堆顶元素，则应将num插入min中，然后再将min中的堆顶元素插入max中
+				min.offer(num);
+				int tmp = min.poll();
+				max.offer(tmp);
+			}
+
+		} else {
+			//插入前是奇数个，则在右边的最小堆插入
+			if (num < max.peek()) {
+				max.offer(num);
+				int tmp = max.poll();
+				min.offer(tmp);
+			} else {
+				min.offer(num);
+			}
+		}
+		count++;
+
+
+	}
+
+	int count = 0;
+	private PriorityQueue<Integer> min = new PriorityQueue<>(); //中位数右边的最小堆
+	private PriorityQueue<Integer> max = new PriorityQueue<>(new Comparator<Integer>() {
+		@Override
+		public int compare(Integer o1, Integer o2) {
+			return o2.compareTo(o1);
+		}
+	}); //中位数左边的最大堆
+
+	public Double GetMedian() {
+		if ((count & 1) == 0) {
+			return (double) (max.peek() + min.peek()) / 2;
+		} else {
+			return (double) max.peek();
+		}
+	}
+
+
+
 	public static void main(String[] args) {
 
-        int[] duplication = new int[1];
-        int[] numbers = {1,2,3,4,5};
-		System.out.println(multiply(numbers));
+        TreeNode head = new TreeNode(8);
+        TreeNode node1 = new TreeNode(6);
+        TreeNode node2 = new TreeNode(10);
+        TreeNode node3 = new TreeNode(5);
+        TreeNode node4 = new TreeNode(7);
+        TreeNode node5 = new TreeNode(9);
+        TreeNode node6 = new TreeNode(11);
+        head.left = node1;
+        head.right = node2;
+        node1.left = node3;
+        node1.right = node4;
+        node2.left = node5;
+        node2.right = node6;
+
+		System.out.println(TreeNode.KthNode(head, 2).val);
 
 	}
 
