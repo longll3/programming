@@ -877,25 +877,182 @@ public class main {
 		}
 	}
 
+	/**题目：正则表达式匹配
+	 * 请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。
+	 * 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+	 * @param str
+	 * @param pattern
+	 * @return
+	 */
+	public static boolean match(char[] str, char[] pattern)
+	{
+		if (str.length == 0 && pattern.length == 0) return true;
+		if (pattern.length == 0) return false;
 
+		return matchHelp(str, pattern, 0, 0);
+	}
+
+	public static boolean matchHelp(char[] str, char[] pattern, int indexStr, int indexPattern) {
+		if (indexStr == str.length && indexPattern == pattern.length) return true;
+		if (indexStr < str.length && indexPattern == pattern.length) return false;
+
+		//当第二个字符是*时
+		if (indexPattern < pattern.length-1 && pattern[indexPattern+1] == '*') {
+			//当str的第一个字符匹配pattern的第一个字符
+			if (indexStr != str.length && (str[indexStr] == pattern[indexPattern] || pattern[indexPattern] == '.')) {
+				return matchHelp(str, pattern, indexStr+1, indexPattern) // str继续向后，可以匹配0～n个
+						|| matchHelp(str, pattern, indexStr+1, indexPattern+2) //相当于匹配到最后一个时，都向后移
+						|| matchHelp(str, pattern, indexStr, indexPattern+2); // str第一个字符忽略，相当于0个的时候
+			} else {
+				return matchHelp(str, pattern, indexStr, indexPattern+2);
+			}
+		} else {
+			//当str的字符匹配pattern的字符 或者 pattern是.时（可以匹配任意）
+			if (indexStr != str.length && (str[indexStr] == pattern[indexPattern] || pattern[indexPattern] == '.')) {
+
+				return matchHelp(str, pattern, indexStr+1, indexPattern+1);
+			} else {
+				return false;
+			}
+		}
+
+	}
+
+	/**题目：表示数值的字符串
+	 * 请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。
+	 * 例如，字符串"+100","5e2","-123","3.1416"和"-1E-16"都表示数值。
+	 * 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNumeric(char[] str) {
+		//数字格式 A[.B][e|E C] .B[e|E C]
+		//A 和 C都可有有正负号
+		if (str.length == 0) return false;
+		int index = 0;
+		while (index < str.length) {
+			//第一部分A
+			if (str[index] == '+' || str[index] == '-') {
+				index++;
+			}
+			int tmp = index;
+			while (index < str.length && isNum(str[index])) {
+				index++;
+			}
+			if (index == tmp && str[index] != '.') {
+				// +- 号之后没有数字
+				return false;
+			}
+
+			if (index < str.length) {
+				//如果有.
+				if (str[index] == '.') {
+					index++;
+					tmp = index;
+					while (index < str.length && isNum(str[index])) {
+						index++;
+					}
+					if (tmp == index) {
+						//.后没有数字
+						return false;
+					}
+					if (index == str.length) {
+						return true;
+					}
+					if (str[index] == 'E' || str[index] == 'e') {
+						index++;
+
+						if (index < str.length && (str[index] == '+' || str[index] == '-')) {
+							index++;
+						}
+						tmp = index;
+						while (index < str.length && isNum(str[index])) {
+							index++;
+						}
+						if (index == tmp) {
+							//E|e后没有数字
+							return false;
+						}
+						if (index != str.length) {
+							//后面还有非数字的字符
+							return false;
+						}
+					} else {
+						return false;
+					}
+
+					//如果没有.直接E
+				} else if (str[index] == 'e' || str[index] == 'E') {
+					index++;
+					if (index < str.length && (str[index] == '+' || str[index] == '-')) {
+						index++;
+					}
+					tmp = index;
+					while (index < str.length && isNum(str[index])) {
+						index++;
+					}
+
+					if (index == tmp) {
+						//E|e后没有数字
+						return false;
+					}
+					if (index != str.length) {
+						//后面还有非数字的字符
+						return false;
+					}
+
+				} else {
+					//再其他字符
+					return false;
+				}
+			} else {
+				//一路数字到结束
+				return true;
+			}
+
+		}
+		return true;
+	}
+
+	public static boolean isNumeric2(char[] str) {
+		boolean doc= false, e=false;
+		for (int i = 0; i < str.length; i++) {
+			if (str[i] == '.') {
+				if (doc) return false;
+				if (e) return false; // .一定在e前面出现
+				doc = true;
+			} else if (str[i] == 'E' || str[i] == 'e') {
+				if (i == str.length-1) return false; //后面没有数字
+				if (e) return false;
+				e = true;
+			} else if (str[i] == '+' || str[i] == '-') {
+				if (e && str[i-1] != 'e' && str[i-1] != 'E') return false; //如有有e,则一定紧跟其后出现
+				if (!e && i != 0) return false; //还没有e的话，则只能在第一位出现
+			} else if (str[i] < '0' || str[i] > '9') {
+				return false;
+			}
+
+		}
+		return true;
+	}
 
 	public static void main(String[] args) {
 
-        TreeNode head = new TreeNode(8);
-        TreeNode node1 = new TreeNode(6);
-        TreeNode node2 = new TreeNode(10);
-        TreeNode node3 = new TreeNode(5);
-        TreeNode node4 = new TreeNode(7);
-        TreeNode node5 = new TreeNode(9);
-        TreeNode node6 = new TreeNode(11);
-        head.left = node1;
-        head.right = node2;
-        node1.left = node3;
-        node1.right = node4;
-        node2.left = node5;
-        node2.right = node6;
+//        TreeNode head = new TreeNode(8);
+//        TreeNode node1 = new TreeNode(6);
+//        TreeNode node2 = new TreeNode(10);
+//        TreeNode node3 = new TreeNode(5);
+//        TreeNode node4 = new TreeNode(7);
+//        TreeNode node5 = new TreeNode(9);
+//        TreeNode node6 = new TreeNode(11);
+//        head.left = node1;
+//        head.right = node2;
+//        node1.left = node3;
+//        node1.right = node4;
+//        node2.left = node5;
+//        node2.right = node6;
 
-		System.out.println(TreeNode.KthNode(head, 2).val);
+		System.out.println(isNumeric2("123.45e+6".toCharArray()));
 
 	}
 
