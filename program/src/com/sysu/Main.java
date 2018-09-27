@@ -5,32 +5,11 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
+        Sort sort = new Sort();
+        int[] a = new int[]{4, 1, 3, 2, 16, 9, 10, 14, 8, 7};
+        sort.mergeSort(a);
 
-        while ((t--) > 0) {
-            String s = sc.next();
-            if (s.length() > 10) {
-                char[] ss = s.toCharArray();
-                StringBuffer res = new StringBuffer();
-                res.append(ss[0]);
-                int count = 0;
-                for (int i = 1; i < ss.length; i++) {
-                    if (i != ss.length-1) {
-                        count++;
-                    } else {
-                        res.append(count);
-                        res.append(ss[i]);
-                    }
-                }
-                System.out.println(res.toString());
-
-            } else {
-                System.out.println(s);
-            }
-
-        }
-
+        System.out.println("");
     }
 
 

@@ -1036,6 +1036,141 @@ public class main {
 		return true;
 	}
 
+
+	/**
+	 * 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+	 * @param sequence
+	 * @return
+	 */
+	//BST：二叉树上又加了个搜索的限制。其要求：每个节点比其左子树元素大，比其右子树元素小。
+	public static boolean VerifySquenceOfBST(int [] sequence) {
+		//最后一个值为根，那么把前面的分为两部分，左边部分比根小，右边部分比根大
+		if (sequence.length == 0) return false;
+		return judge(sequence, 0, sequence.length-1);
+	}
+
+	public static boolean judge(int[] sequence, int start, int end) {
+		if (start == end) return true;
+		if (end - start == 1 || start - end == 1) return true;
+
+		int root = sequence[end];
+		int l = start;
+		int r = end-1;
+		while (l <= end && sequence[l] < root ) l++;
+		while ( r >= start && sequence[r] > root) r--;
+
+		if (l - r != 1) return false;
+
+		return judge(sequence, start, l-1) && judge(sequence, r+1, end-1);
+	}
+
+
+	/**
+	 * 在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。
+	 * 输入一个数组,求出这个数组中的逆序对的总数P。并将P对1000000007取模的结果输出。 即输出P%1000000007
+	 * 数据范围：
+	 *
+	 * 	对于%50的数据,size<=10^4
+	 *
+	 * 	对于%75的数据,size<=10^5
+	 *
+	 * 	对于%100的数据,size<=2*10^5
+	 *
+	 * @param array
+	 * @return
+	 */
+	public static int InversePairs(int [] array) {
+		int [] sorted = new int[array.length];
+		for (int i = 0; i< array.length; i++) {
+			sorted[i] = array[i];
+		}
+		int a = digui(array, sorted, 0, array.length-1);
+		return a;
+
+	}
+
+	public static int digui(int [] origin, int [] sorted, int start, int end) {
+		if (end - start == 0) {
+//			b[start] = a[start];
+			return 0;
+		}
+
+		int position = (end+start) / 2;
+		int count = digui(sorted, origin, start, position) + digui(sorted, origin, position+1, end);
+
+		int i = position, j = end;
+		int sorted_index = end;
+		while(i >= start && j >= position+1) {
+			while (origin[i] < origin[j] && i >= start && j >= position+1) {
+				sorted[sorted_index--] = origin[j--];
+			}
+			count += j-position;
+			sorted[sorted_index--] = origin[i--];
+
+		}
+
+		while(i >= start) sorted[sorted_index--] = origin[i--];
+		while(j >= position+1) sorted[sorted_index--] = origin[j--];
+
+		return count;
+
+	}
+
+	/**
+	 * 给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。
+	 * 例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，
+	 * 他们的最大值分别为{4,4,6,6,6,5}；
+	 * 针对数组{2,3,4,2,6,2,5,1}的滑动窗口有以下6个：
+	 * {[2,3,4],2,6,2,5,1}， {2,[3,4,2],6,2,5,1}， {2,3,[4,2,6],2,5,1}， {2,3,4,[2,6,2],5,1}， {2,3,4,2,[6,2,5],1}， {2,3,4,2,6,[2,5,1]}。
+	 * @param num
+	 * @param size
+	 * @return
+	 */
+	public static ArrayList<Integer> maxInWindows(int [] num, int size) {
+		ArrayList<Integer> re = new ArrayList<>();
+
+		if (size == 0 || size > num.length) return re;
+
+		int max = 0;
+		int max_index = 0;
+		for (int i = 0; i < size; i++) {
+			if (num[i] > max) {
+				max = num[i];
+				max_index = i;
+			}
+		}
+
+		re.add(max);
+		for (int i = size; i < num.length; i++) {
+			//当前窗口新进了一个更大的值
+			if (num[i] > max) {
+				max = num[i];
+				max_index  = i;
+				re.add(max);
+			} else {
+				//新进来的值不如当前的大，需要看之前的最大值是否已经出去窗口了
+				if (i - max_index >= size) {
+					//原本的最大值已经出去了，则重新找一个最大值
+					max = 0;
+					for (int j = 0; j < size; j++) {
+						if (num[i-j] > max) {
+							max = num[i-j];
+							max_index = i-j;
+						}
+					}
+					re.add(max);
+				} else {
+					//没出去的话，那也就还是原来的最大值
+					re.add(max);
+				}
+			}
+		}
+
+		return re;
+
+	}
+
+
 	public static void main(String[] args) {
 
 //        TreeNode head = new TreeNode(8);
@@ -1051,6 +1186,7 @@ public class main {
 //        node1.right = node4;
 //        node2.left = node5;
 //        node2.right = node6;
+
 
 		System.out.println(isNumeric2("123.45e+6".toCharArray()));
 

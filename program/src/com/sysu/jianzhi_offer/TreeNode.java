@@ -395,6 +395,90 @@ public class TreeNode {
     private static int count = 0;
 
 
+    /**题目：重建二叉树
+     * 输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。
+     * 假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+     * 例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+     * @param pre
+     * @param in
+     * @return
+     */
+    public static TreeNode reConstructBinaryTree(int [] pre,int [] in) {
 
+        return reBuild(pre, 0, pre.length-1, in, 0, in.length-1);
+
+    }
+
+    public static TreeNode reBuild(int [] pre, int prestart, int preend, int [] in, int instart, int inend) {
+        if (prestart > preend || instart > inend) return null;
+
+        TreeNode root = new TreeNode(pre[prestart]); // 前序的第一个一定是根节点
+        //找到中序中的左边部分
+        int in_left = instart;
+        int index = 0;
+        while (in[in_left] != pre[prestart]) {
+            in_left++;
+            index++;
+        }
+
+        root.left = reBuild(pre, prestart+1, prestart+index, in, instart, in_left-1);
+        root.right = reBuild(pre, index+1+prestart, preend, in, in_left+1, inend);
+
+        return root;
+
+    }
+
+
+    /**
+     * 请实现两个函数，分别用来序列化和反序列化二叉树
+     * @param root
+     * @return
+     */
+
+    //以前序的顺序序列化，用“#”代替null空节点，“，”分割各个val
+    static String Serialize(TreeNode root) {
+        StringBuffer sb = new StringBuffer();
+        serializeRecursion(root, sb);
+        return sb.toString();
+
+    }
+
+    public static void serializeRecursion(TreeNode node, StringBuffer sb) {
+        if (node == null) {
+            sb.append("#,");
+            return;
+        }
+        sb.append(node.val);
+        sb.append(",");
+        serializeRecursion(node.left, sb);
+        serializeRecursion(node.right, sb);
+        return;
+
+    }
+
+    public static TreeNode Deserialize(String str) {
+        String[] tree = str.split(",");
+        TreeNode root = deserializeRecursion(tree);
+        return root;
+
+    }
+
+    static int index = 0;
+
+    public static TreeNode deserializeRecursion(String[] tree) {
+        if (tree[index].equals("#")) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(tree[index++]));
+
+        root.left = deserializeRecursion(tree);
+        index++;
+        root.right = deserializeRecursion(tree);
+
+
+        return root;
+
+
+    }
 
 }

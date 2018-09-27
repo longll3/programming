@@ -117,4 +117,146 @@ public class Sort {
         }
     }
 
+
+    /**
+     * 堆排序： 参考：http://bubkoo.com/2014/01/14/sort-algorithm/heap-sort/
+     * 有3种操作：
+     * 最大堆调整（Max-Heapify）：将堆的末端子节点作调整，使得子节点永远小于父节点
+     * 创建最大堆（Build-Max-Heap）：将堆所有数据重新排序，使其成为最大堆
+     * 堆排序（Heap-Sort）：移除位在第一个数据的根节点，并做最大堆调整的递归运算
+     */
+    
+    /**
+     * 从index开始检查并保持堆的最大性质,用于调整
+     * @param arr   
+     * @param index [检查的起始下标]
+     */
+    public void maxHeapify(int[] arr, int index, int length) {
+        int i = index;
+        int leftChild = 2*index+1;
+        int rightChild = (i+1)*2;
+
+        if (leftChild < length && arr[i] < arr[leftChild]) {
+            //当arr[index] < 左子结点
+            i = leftChild;
+        }
+
+        if (rightChild < length && arr[i] < arr[rightChild]) {
+            i = rightChild;
+        }
+
+        //现在arr[i]为index leftChild rightChild 中最大的那个
+        if (i != index) {
+            //有子结点 > arr[index]
+            swap(arr, i, index);
+            maxHeapify(arr, i, length);
+        }
+    }
+
+    //非递归
+    public void maxHeapifyNotRecursion(int[] arr, int index, int length) {
+        int i = index;
+        int leftChild = 2*i+1;
+        int rightChild = (i+1)*2;
+
+        while (leftChild < length || rightChild < length) {
+            if (leftChild < length && arr[i] < arr[leftChild]) {
+                //当arr[index] < 左子结点
+                i = leftChild;
+            }
+
+            if (rightChild < length && arr[i] < arr[rightChild]) {
+                i = rightChild;
+            }
+
+            //现在arr[i]为index leftChild rightChild 中最大的那个
+            if (i != index) {
+                //有子结点 > arr[index]
+                swap(arr, i, index);
+                index = i;
+                leftChild = 2*i + 1;
+                rightChild = (i+1)*2;
+
+            } else {
+                break;
+            }
+        }
+        
+    }
+    
+    public void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    /**
+     * [根据数组创建堆，自下而上]
+     * @param arr 
+     */
+    public void buildMaxHeap(int[] arr) {
+        //从最后一个元素的父结点开始不断调用maxHeapify
+        //向下取整
+        for (int i = (arr.length-1)/2; i >= 0; i--) {
+//            maxHeapify(arr, i, arr.length);
+            maxHeapifyNotRecursion(arr, i, arr.length);
+        }
+    }
+
+    public void heapSort(int[] arr) {
+        int length = arr.length;
+        buildMaxHeap(arr);
+        for (int i = length-1; i > 0; i--) {
+            //先将堆顶元素后末尾结点交换
+            swap(arr, i, 0);
+            //然后再向下调整
+//            maxHeapify(arr, 0, i);
+            maxHeapifyNotRecursion(arr, 0, i);
+        }
+    }
+
+
+    /**
+     * 归并排序Merge-Sort
+     * 先分解再合并
+     * 合并 mergeArray:将两个有序的数组合并起来
+     */
+    public void mergeSort(int[] arr) {
+        int[] temp = new int[arr.length];
+
+        mergeSortHelp(arr, 0, arr.length-1, temp);
+    }
+
+    public void mergeSortHelp(int[] arr, int left, int right, int[] tmp){
+        if (left < right) {
+            int mid = (left+right)/2; //分为2部分
+            mergeSortHelp(arr, left, mid, tmp);  // 左边归并排序，使得左子序列有序
+            mergeSortHelp(arr, mid+1, right, tmp);  // 右边归并排序，使得右子序列有序
+            mergeArray(arr, left, mid, right, tmp);  // 将两个有序子数组合并操作
+        }
+    }
+
+    public void mergeArray(int[] arr, int left, int mid, int right, int[] tmp) {
+        int i = left, j = mid+1;
+        int index = 0;
+        while (i <= mid && j <= right) {
+            if (arr[i] <= arr[j]) {
+                tmp[index++] = arr[i++];
+            } else {
+                tmp[index++] = arr[j++];
+            }
+        }
+        while (i <= mid) tmp[index++] = arr[i++];
+        while (j <= right) tmp[index++] = arr[j++];
+
+        //将tmp的内容拷贝回去
+        index = 0;
+        while (left <= right) {
+            arr[left++] = tmp[index++];
+        }
+        
+    }
+    
+
+
 }
