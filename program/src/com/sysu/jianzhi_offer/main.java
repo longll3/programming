@@ -1,7 +1,9 @@
 package com.sysu.jianzhi_offer;
 
+import java.net.Inet4Address;
 import java.util.*;
 
+import com.sysu.Main;
 import com.sysu.jianzhi_offer.selfStack;
 
 public class main {
@@ -1171,6 +1173,50 @@ public class main {
 	}
 
 
+	/**题目：字符流中第一个不重复的字符
+	 * 请实现一个函数用来找出字符流中第一个只出现一次的字符。
+	 * 例如，当从字符流中只读出前两个字符"go"时，第一个只出现一次的字符是"g"。
+	 * 当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
+	 * @param ch
+	 */
+
+	private int[] map = new int[256];
+	private int indexInStream = 0;
+	{
+		for (int i = 0; i < 256; i++) {
+			map[i] = -1;
+		}
+	}
+
+	//Insert one char from stringstream
+	public void Insert(char ch)
+	{
+		if (map[ch] == -1) map[ch] = indexInStream++;
+		else map[ch] = -2;
+	}
+	//return the first appearence once char in current stringstream
+	public char FirstAppearingOnce()
+	{
+		int min = Integer.MAX_VALUE;
+		int index = 0;
+		for (int i = 0; i < map.length; i++) {
+			if (map[i] >= 0) {
+				if (min > map[i]) {
+					min = map[i];
+					index = i;
+				}
+			}
+		}
+		if (min < Integer.MAX_VALUE) {
+			return (char)index;
+		} else {
+			return '#';
+		}
+	}
+
+
+
+
 	public static void main(String[] args) {
 
 //        TreeNode head = new TreeNode(8);
@@ -1188,7 +1234,24 @@ public class main {
 //        node2.right = node6;
 
 
-		System.out.println(isNumeric2("123.45e+6".toCharArray()));
+		//!@$%^&*()_
+		main main = new main();
+		main.Insert('!');
+		System.out.println(main.FirstAppearingOnce());
+		main.Insert('@');
+		System.out.println(main.FirstAppearingOnce());
+		main.Insert('$');
+		System.out.println(main.FirstAppearingOnce());
+		main.Insert('^');
+		System.out.println(main.FirstAppearingOnce());
+		main.Insert('&');
+		System.out.println(main.FirstAppearingOnce());
+		main.Insert('*');
+		System.out.println(main.FirstAppearingOnce());
+		main.Insert('(');
+		System.out.println(main.FirstAppearingOnce());
+		main.Insert(')');
+		System.out.println(main.FirstAppearingOnce());
 
 	}
 
