@@ -164,7 +164,9 @@ public class main {
 					 hasPathHelper(matrix, rows, cols, startaRow, startCol+1, str, index+1, isVisited) ||
 					 hasPathHelper(matrix, rows, cols, startaRow, startCol-1, str, index+1, isVisited) ||
 					 hasPathHelper(matrix, rows, cols, startaRow+1, startCol, str, index+1, isVisited);
-			isVisited[crrPos] = false; //这一步就是用来回溯的，恢复到没走过的状态。
+			if (!result) {
+				isVisited[crrPos] = false; //这一步就是用来回溯的，恢复到没走过的状态。
+			}
 		}
 		return result;
 	}
@@ -1180,6 +1182,8 @@ public class main {
 	 * @param ch
 	 */
 
+	//一般的char总共8位种可能，因此开一个256大的数组就可以保存ascii码
+	//但是注意：java中的char是16位，采用的是Unicode编码，不过8位的ASCII码包含在Unicode中，是从0~127的。
 	private int[] map = new int[256];
 	private int indexInStream = 0;
 	{
@@ -1214,8 +1218,54 @@ public class main {
 		}
 	}
 
+	/**
+	 * 地上有一个m行和n列的方格。
+	 * 一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于k的格子。
+	 * 例如，当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。但是，它不能进入方格（35,38），因为3+5+3+8 = 19。
+	 * 请问该机器人能够达到多少个格子？
+	 * @param threshold
+	 * @param rows
+	 * @param cols
+	 * @return
+	 */
+	public int movingCount(int threshold, int rows, int cols)
+	{
+		if (threshold < 0 || rows < 0 || cols < 0 ) {
+			return 0;
+		}
+		boolean[] visited = new boolean[rows*cols];
+		for (int i = 0; i < rows*cols; i++) {
+			visited[i] = false;
+		}
 
+		int count = movingCountHelp(threshold, rows, cols, 0, 0, visited);
+		return count;
+	}
 
+	public int movingCountHelp(int threshold, int rows, int cols, int r, int c, boolean[] visited) {
+		if (r >= rows || c >= cols || r < 0 || c < 0) {
+			return 0;
+		}
+
+		if (digitSum(r) + digitSum(c) <= threshold && visited[r*cols+c] == false) {
+			visited[r*cols+c] = true;
+			return 1+movingCountHelp(threshold, rows, cols, r+1, c, visited)
+					+movingCountHelp(threshold, rows, cols, r-1, c, visited)
+					+movingCountHelp(threshold, rows, cols, r, c+1, visited)
+					+movingCountHelp(threshold, rows, cols, r, c-1, visited);
+
+		} else return 0;
+
+	}
+
+	public int digitSum(int num) {
+		int sum = 0;
+		while (num != 0) {
+			sum+=(num%10);
+			num /= 10;
+		}
+		return sum;
+	}
 
 	public static void main(String[] args) {
 
@@ -1236,22 +1286,8 @@ public class main {
 
 		//!@$%^&*()_
 		main main = new main();
-		main.Insert('!');
-		System.out.println(main.FirstAppearingOnce());
-		main.Insert('@');
-		System.out.println(main.FirstAppearingOnce());
-		main.Insert('$');
-		System.out.println(main.FirstAppearingOnce());
-		main.Insert('^');
-		System.out.println(main.FirstAppearingOnce());
-		main.Insert('&');
-		System.out.println(main.FirstAppearingOnce());
-		main.Insert('*');
-		System.out.println(main.FirstAppearingOnce());
-		main.Insert('(');
-		System.out.println(main.FirstAppearingOnce());
-		main.Insert(')');
-		System.out.println(main.FirstAppearingOnce());
+
+		System.out.println(main.movingCount(5, 10, 10));
 
 	}
 
