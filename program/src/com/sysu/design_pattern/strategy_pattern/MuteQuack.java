@@ -1,8 +1,8 @@
 package com.sysu.design_pattern.strategy_pattern;
 
-public class Quack implements QuackBehavior {
+public class MuteQuack implements QuackBehavior {
     @Override
     public void quack() {
-        System.out.println("Quack~");
+        System.out.println("<<Silence>>");
     }
 }

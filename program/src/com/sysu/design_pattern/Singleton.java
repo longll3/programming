@@ -1,8 +1,5 @@
 package com.sysu.design_pattern;
 
-import java.security.Signature;
-import java.util.logging.SimpleFormatter;
-
 public class Singleton {
 
     private static Singleton instance;
@@ -33,7 +30,7 @@ public class Singleton {
     }
 
     /******以下都线程安全***********
-     * 饿汉式，
+     * 饿汉式，推荐使用
      * 优点：没有加锁，执行效率会提高。
      * 缺点：类加载时就初始化，浪费内存。
      */
