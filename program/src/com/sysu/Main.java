@@ -5,11 +5,8 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Sort sort = new Sort();
-        int[] a = new int[]{4, 1, 3, 2, 16, 9, 10, 14, 8, 7};
-        sort.mergeSort(a);
-
-        System.out.println("");
+        B b = new B();
+        System.out.println(B.assignID());
     }
 
 
@@ -34,7 +31,7 @@ class A {
         System.out.println(a);
     }
 
-    private static int assignID() {
+    public static int assignID() {
         int a = 10;
         return a;
     }
@@ -51,6 +48,14 @@ class A {
     }
 
 
+}
+
+class B extends A {
+
+    public static int assignID() {
+        int a = 5;
+        return a;
+    }
 }
 
 

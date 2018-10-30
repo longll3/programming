@@ -1,5 +1,16 @@
 package com.sysu.design_pattern.factory_pattern;
 
+
+/**
+ * factory method pattern
+ * 工厂方法模式，定义了一个创建对象的接口，但由子类决定要实例化的类是哪一个。
+ * 工厂方法让类把实例化推迟到子类
+ *
+ * abstract factory pattern
+ * 抽象工厂模式，抽象工厂定义了一个负责创建一组产品的接口，利用工厂方法实现
+ */
+
+
 //使用该工厂，通过传递类型信息来获取实体类的对象。
 public class FactoryPatternDemo {
     public static void main(String[] args) {
