@@ -1,4 +1,4 @@
-package com.sysu.design_pattern;
+package com.sysu.design_pattern.singleton_pattern;
 
 public class Singleton {
 
@@ -7,7 +7,10 @@ public class Singleton {
     //关键代码：构造函数私有
     private Singleton() {}
 
-    //懒汉式，线程不安全：不支持多线程
+    /**
+     * 懒汉式，线程不安全：不支持多线程
+     * 延迟实例化，对资源敏感的对象特别重要
+     */
     public static Singleton getInstance() {
         if (instance == null) {
             instance = new Singleton();
@@ -20,6 +23,7 @@ public class Singleton {
     /**懒汉式，线程安全：支持多线程,效率很低，99% 情况下不需要同步
      * 优点：第一次调用才初始化，避免内存浪费
      * 缺点：必须加锁 synchronized 才能保证单例，但加锁会影响效率。
+     *      只有第一次执行次方法时，才真正需要同步。即一旦设置好instance变量，就不需要再同步了。之后每次调用这个方法，同步都是一种累赘
      * @return
      */
     public static synchronized Singleton getInstanceThreadSafe() {
@@ -30,7 +34,7 @@ public class Singleton {
     }
 
     /******以下都线程安全***********
-     * 饿汉式，推荐使用
+     * 急切实例化，饿汉式，推荐使用
      * 优点：没有加锁，执行效率会提高。
      * 缺点：类加载时就初始化，浪费内存。
      */
@@ -42,6 +46,7 @@ public class Singleton {
     /**
      * 双检锁/双重校验锁（DCL，即 double-checked locking）
      * 这种方式采用双锁机制，安全且在多线程情况下能保持高性能。
+     * 只有第一次会同步
      */
     private volatile static Singleton singleton; //volatile关键字是得不会被编译器重排列指令优化
     public static Singleton getSingleton() {
